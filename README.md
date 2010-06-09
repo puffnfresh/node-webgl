@@ -1,6 +1,11 @@
 node-webgl
 ==========
 
+Screenshot
+----------
+
+![](http://brianmckenna.org/blog/static/nodejs_webgl.png)
+
 Dependencies
 ------------
 
@@ -37,4 +42,4 @@ Developing
 See
 ---
 
-http://brianmckenna.org/blog/nodejs_webgl
+* [My quick blog post](http://brianmckenna.org/blog/nodejs_webgl)
