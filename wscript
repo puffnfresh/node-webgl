@@ -14,12 +14,15 @@ def configure(conf):
   conf.check_tool("compiler_cxx")
   conf.check_tool("node_addon")
   conf.env["CXXDEFINES"] = ["GL_GLEXT_PROTOTYPES"]
+  conf.check_cfg(package='gl', mandatory=True, args='--cflags --libs')
+  conf.check_cfg(package='sdl', mandatory=True, args='--cflags --libs')
+  conf.check_cfg(package='IL', mandatory=True, args='--cflags --libs')
   
 def build(bld):
   webgl = bld.new_task_gen("cxx", "shlib", "node_addon")
   webgl.target = "webgl"
   webgl.source = "src/webgl.cc"
-  webgl.lib = ["GL", "SDL", 'IL']
+  webgl.uselib = ["GL", "SDL", 'IL']
 
 def shutdown():
   # HACK to get binding.node out of build directory.
