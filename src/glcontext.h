@@ -175,7 +175,7 @@ protected:
     BufferData (const Arguments& args) {
         HandleScope scope;
 
-        FloatArray *fa = Unwrap<FloatArray>(args[1]->ToObject());
+        Float32Array *fa = Unwrap<Float32Array>(args[1]->ToObject());
 
 	GLenum target = args[0]->Uint32Value();
         GLsizei size = fa->Length();
@@ -264,7 +264,7 @@ protected:
     UniformMatrix4fv (const Arguments &args) {
 	HandleScope scope;
 
-        FloatArray *fa = Unwrap<FloatArray>(args[2]->ToObject());
+        Float32Array *fa = Unwrap<Float32Array>(args[2]->ToObject());
 
 	GLint location = args[0]->IntegerValue();
 	GLsizei count = fa->Length() / sizeof(float);

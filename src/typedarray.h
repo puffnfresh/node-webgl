@@ -9,7 +9,7 @@
 using namespace v8;
 using namespace node;
 
-class FloatArray : public ObjectWrap {
+class Float32Array : public ObjectWrap {
 public:
 
     static void
@@ -18,11 +18,11 @@ public:
 
 	Local<FunctionTemplate> t = FunctionTemplate::New(New);
 	t->InstanceTemplate()->SetInternalFieldCount(1);
-	t->SetClassName(String::NewSymbol("FloatArray"));
+	t->SetClassName(String::NewSymbol("Float32Array"));
 
 	NODE_SET_PROTOTYPE_METHOD(t, "set", Set);
 
-	target->Set(String::NewSymbol("FloatArray"), t->GetFunction());
+	target->Set(String::NewSymbol("Float32Array"), t->GetFunction());
     }
 
     void *
@@ -51,7 +51,7 @@ protected:
 
 	Buffer *buf = ObjectWrap::Unwrap<Buffer>(args[0]->ToObject());
 
-	FloatArray *fa = new FloatArray(buf);
+	Float32Array *fa = new Float32Array(buf);
 	fa->Wrap(args.This());
 
 	return args.This();
@@ -61,7 +61,7 @@ protected:
     Set (const Arguments& args) {
 	HandleScope scope;
 
-        FloatArray *fa = Unwrap<FloatArray>(args.This());
+        Float32Array *fa = Unwrap<Float32Array>(args.This());
 
 	Local<Array> a = Local<Array>::Cast(args[0]);
 
@@ -77,7 +77,7 @@ protected:
 	return Undefined();
     }
 
-    FloatArray (Buffer *b) : ObjectWrap() {
+    Float32Array (Buffer *b) : ObjectWrap() {
 	    buf = b;
     }
 

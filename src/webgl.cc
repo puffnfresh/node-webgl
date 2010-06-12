@@ -190,7 +190,7 @@ init (Handle<Object> target) {
     HandleScope scope;
 
     GLContext::Initialize(target);
-    FloatArray::Initialize(target);
+    Float32Array::Initialize(target);
     Image::Initialize(target);
     Window::Initialize(target);
 }

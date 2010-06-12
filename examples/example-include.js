@@ -6,7 +6,7 @@ function init(canvas, nodejs) {
     if(nodejs) {
 	var webgl = require('../webgl');
 	ArrayBuffer = require('buffer').Buffer;
-	FloatArray = webgl.FloatArray;
+	Float32Array = webgl.Float32Array;
 	Image = webgl.Image;
     }
 
@@ -60,7 +60,7 @@ function init(canvas, nodejs) {
     var textureFloatArray;
     try {
 	textureArray = new ArrayBuffer(2 * 4 * 4);
-	textureFloatArray = new FloatArray(textureArray);
+	textureFloatArray = new Float32Array(textureArray);
     } catch (x) {
     }
     var textureCoordAttribute = gl.getAttribLocation(program, "aTextureCoord");
@@ -114,7 +114,7 @@ function init(canvas, nodejs) {
     var vertexFloatArray;
     try {
 	vertexArray = new ArrayBuffer(4 * 4 * 3);
-	vertexFloatArray = new FloatArray(vertexArray);
+	vertexFloatArray = new Float32Array(vertexArray);
     } catch (x) {
     }
     var vertexPositionAttribute = gl.getAttribLocation(program, "aVertexPosition");
@@ -144,7 +144,7 @@ function init(canvas, nodejs) {
     var projectionFloatArray;
     try {
 	projectionArray = new ArrayBuffer(4 * 16);
-	projectionFloatArray = new FloatArray(projectionArray);
+	projectionFloatArray = new Float32Array(projectionArray);
     } catch (x) {
     }
     (function() {
