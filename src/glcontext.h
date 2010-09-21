@@ -108,6 +108,9 @@ public:
         NODE_SET_PROTOTYPE_METHOD(t, "clearColor", ClearColor);
         NODE_SET_PROTOTYPE_METHOD(t, "clear", Clear);
 
+        NODE_SET_PROTOTYPE_METHOD(t, "blendFunc", BlendFunc);
+        NODE_SET_PROTOTYPE_METHOD(t, "enable", Enable);
+
         NODE_SET_PROTOTYPE_METHOD(t, "drawArrays", DrawArrays);
 
         NODE_SET_PROTOTYPE_METHOD(t, "createTexture", CreateTexture);
@@ -381,6 +384,27 @@ protected:
 	GLclampf b = args[2]->NumberValue();
 	GLclampf a = args[3]->NumberValue();
 	glClearColor(r, g, b, a);
+
+        return Undefined();
+    }
+
+    static Handle<Value>
+    BlendFunc (const Arguments& args) {
+        HandleScope scope;
+
+	GLenum sfactor = args[0]->Uint32Value();
+	GLenum dfactor = args[0]->Uint32Value();
+	glBlendFunc(sfactor, dfactor);
+
+        return Undefined();
+    }
+
+    static Handle<Value>
+    Enable (const Arguments& args) {
+        HandleScope scope;
+
+	GLenum cap = args[0]->Uint32Value();
+	glEnable(cap);
 
         return Undefined();
     }
