@@ -68,12 +68,6 @@ public:
 	return ilGetInteger(IL_IMAGE_HEIGHT);
     }
 
-    int
-    GetFormat () {
-	ilBindImage(image_id);
-	return ilGetInteger(IL_IMAGE_FORMAT);
-    }
-
     void *
     GetData () {
 	return data;

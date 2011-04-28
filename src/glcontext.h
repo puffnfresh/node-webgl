@@ -26,6 +26,9 @@ public:
 	// Constants
 	Handle<ObjectTemplate> proto = t->PrototypeTemplate();
 
+	SetConstant(proto, "RGB", 0x1907);
+	SetConstant(proto, "RGBA", 0x1908);
+	
 	SetConstant(proto, "DEPTH_BUFFER_BIT",   0x00000100);
 	SetConstant(proto, "STENCIL_BUFFER_BIT", 0x00000400);
 	SetConstant(proto, "COLOR_BUFFER_BIT",   0x00004000);
@@ -469,14 +472,14 @@ protected:
 
 	GLenum target = args[0]->Uint32Value();
 	GLint level = args[1]->IntegerValue();
-	Image *image = Unwrap<Image>(args[2]->ToObject());
-	GLboolean flipY = args[3]->BooleanValue();
-	if(flipY) {
-		image->FlipVertically();
-	}
-	glTexImage2D(target, level, image->GetBPP(), image->GetWidth(),
-		     image->GetHeight(), 0, image->GetFormat(),
-		     GL_UNSIGNED_BYTE, image->GetData());
+	GLenum internalformat = args[2]->IntegerValue();
+	GLenum format = args[3]->IntegerValue();
+	GLenum type = args[4]->IntegerValue();
+	Image *image = Unwrap<Image>(args[5]->ToObject());
+	
+	glTexImage2D(target, level, internalformat, image->GetWidth(),
+		     image->GetHeight(), 0, format,
+		     type, image->GetData());
 
 	// We have to 
 	glGenerateMipmapEXT(GL_TEXTURE_2D);
