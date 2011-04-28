@@ -27,17 +27,23 @@ public:
 
     void *
     GetData () {
-	return (void *)buf->data();
+	Local<Value> buf = handle_->GetHiddenValue(String::New("buffer"));
+
+	return (void *)Buffer::Data(buf->ToObject());
     }
 
     size_t
     Length () {
-	return buf->length();
+	Local<Value> buf = handle_->GetHiddenValue(String::New("buffer"));
+
+	return Buffer::Length(buf->ToObject());
     }
 
     void
     Set (float *sequence, uint32_t length) {
-	float *data = (float *)buf->data();
+	Local<Value> buf = handle_->GetHiddenValue(String::New("buffer"));
+
+	float *data = (float *)Buffer::Data(buf->ToObject());
 	for(int i = 0; i < length; i++) {
 	    data[i] = sequence[i];
 	}
@@ -49,10 +55,10 @@ protected:
     New (const Arguments& args) {
 	HandleScope scope;
 
-	Buffer *buf = ObjectWrap::Unwrap<Buffer>(args[0]->ToObject());
-
-	Float32Array *fa = new Float32Array(buf);
+	Float32Array *fa = new Float32Array();
 	fa->Wrap(args.This());
+
+	fa->handle_->SetHiddenValue(String::New("buffer"), args[0]);
 
 	return args.This();
     }
@@ -77,13 +83,8 @@ protected:
 	return Undefined();
     }
 
-    Float32Array (Buffer *b) : ObjectWrap() {
-	    buf = b;
+    Float32Array () : ObjectWrap() {
     }
-
-private:
-
-    Buffer *buf;
 
 };
 
