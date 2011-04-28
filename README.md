@@ -37,7 +37,6 @@ Developing
 * Find nice ways to remove the `nodejs` variable from example-include.js
 * Add more events (e.g. keyboard)
 * Make/port some WebGL examples
-* Find a way to compile addons with a Cygwin version of node.js
 
 See
 ---
