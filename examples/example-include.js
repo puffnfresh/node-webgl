@@ -29,6 +29,10 @@ function init(canvas, nodejs) {
 	].join("\n");
 	
 	var fsource = [
+	    "#ifdef GL_ES",
+	    "precision highp float;",
+	    "#endif",
+	    "",
 	    "varying vec2 vTextureCoord;",
 	    "",
 	    "uniform sampler2D uSampler;",
@@ -93,7 +97,8 @@ function init(canvas, nodejs) {
 	halfHeight = logo.height / 2;
 
         gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.texImage2D(gl.TEXTURE_2D, 0, logo, true);
+	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+	gl.texImage2D(gl.TEXTURE_2D,  0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, logo);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -120,7 +125,6 @@ function init(canvas, nodejs) {
     var vertexPositionAttribute = gl.getAttribLocation(program, "aVertexPosition");
     gl.enableVertexAttribArray(vertexPositionAttribute);
     function setVerts(x, y) {
-
 	var vertices = [
 	    x + halfWidth, y + halfHeight, 0.0,
 	    x + -halfWidth, y + halfHeight, 0.0,
