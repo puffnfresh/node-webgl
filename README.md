@@ -30,7 +30,7 @@ Testing
 
 On Mac OS X, you have to run the following first:
 
-   SDL_VIDEODRIVER=x11
+    SDL_VIDEODRIVER=x11
 
 Developing
 ----------
