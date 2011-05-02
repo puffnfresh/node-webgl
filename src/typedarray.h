@@ -9,6 +9,8 @@
 using namespace v8;
 using namespace node;
 
+#define SET_
+
 class Float32Array : public ObjectWrap {
 public:
 
@@ -19,6 +21,8 @@ public:
 	Local<FunctionTemplate> t = FunctionTemplate::New(New);
 	t->InstanceTemplate()->SetInternalFieldCount(1);
 	t->SetClassName(String::NewSymbol("Float32Array"));
+
+	SetBytesPerElement(t, 4);
 
 	NODE_SET_PROTOTYPE_METHOD(t, "set", Set);
 
@@ -92,12 +96,17 @@ protected:
         Float32Array *fa = Unwrap<Float32Array>(info.This());
 	Local<Value> buf = fa->handle_->GetHiddenValue(String::New("buffer"));
 
-	int len = Buffer::Length(buf->ToObject());
-
-	return scope.Close(Integer::New(len));
+	return scope.Close(Integer::New(Buffer::Length(buf->ToObject())));
     }
 
     Float32Array () : ObjectWrap() {
+    }
+
+private:
+
+    static void
+    SetBytesPerElement (Handle<FunctionTemplate> function, unsigned long value) {
+        function->Set(String::New("BYTES_PER_ELEMENT"), Integer::New(value), ReadOnly);
     }
 
 };
