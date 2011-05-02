@@ -64,7 +64,18 @@ protected:
 	Float32Array *fa = new Float32Array();
 	fa->Wrap(args.This());
 
-	fa->handle_->SetHiddenValue(String::New("buffer"), args[0]);
+	Local<Value> buffer = args[0];
+	if (buffer->IsNumber()) {
+	    Handle<Integer> length = buffer->ToInteger();
+
+	    Local<Object> global = Context::GetCurrent()->Global();
+	    Local<Value> bv = global->Get(String::NewSymbol("Buffer"));
+	    Local<Function> b = Local<Function>::Cast(bv);
+
+	    Local<Value> argv[1] = { Local<Value>::New(length) };
+	    buffer = b->NewInstance(1, argv);
+	}
+	fa->handle_->SetHiddenValue(String::New("buffer"), buffer);
 
 	return args.This();
     }
@@ -79,7 +90,7 @@ protected:
 
 	size_t length = a->Length();
 	float *sequence = new float[length];
-	for(int i = 0; i < length; i++) {
+	for (int i = 0; i < length; i++) {
 	    Local<Value> val = a->Get(i);
 	    sequence[i] = val->NumberValue();
 	}
