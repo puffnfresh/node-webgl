@@ -22,6 +22,8 @@ public:
 
 	NODE_SET_PROTOTYPE_METHOD(t, "set", Set);
 
+	t->PrototypeTemplate()->SetAccessor(String::New("length"), LengthGetter);
+
 	target->Set(String::NewSymbol("Float32Array"), t->GetFunction());
     }
 
@@ -81,6 +83,18 @@ protected:
 	delete[] sequence;
 
 	return Undefined();
+    }
+
+    static Handle<Value>
+    LengthGetter (Local<String> property, const AccessorInfo& info) {
+	HandleScope scope;
+
+        Float32Array *fa = Unwrap<Float32Array>(info.This());
+	Local<Value> buf = fa->handle_->GetHiddenValue(String::New("buffer"));
+
+	int len = Buffer::Length(buf->ToObject());
+
+	return scope.Close(Integer::New(len));
     }
 
     Float32Array () : ObjectWrap() {
