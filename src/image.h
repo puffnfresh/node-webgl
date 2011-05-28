@@ -5,7 +5,7 @@
 
 #include <node.h>
 
-#include <IL/il.h>
+#include <FreeImage.h>
 
 using namespace v8;
 using namespace node;
@@ -30,7 +30,7 @@ public:
 
 	target->Set(String::NewSymbol("Image"), t->GetFunction());
 
-	ilInit();
+	FreeImage_Initialise(true);
     }
 
     void
@@ -52,36 +52,43 @@ public:
 
     int
     GetBPP () {
-	ilBindImage(image_id);
-	return ilGetInteger(IL_IMAGE_BPP);
+	    //return FreeImage_GetBPP(image_bmp);
+	    return 32;
     }
 
     int
     GetWidth () {
-	ilBindImage(image_id);
-	return ilGetInteger(IL_IMAGE_WIDTH);
+	return FreeImage_GetWidth(image_bmp);
     }
 
     int
     GetHeight () {
-	ilBindImage(image_id);
-	return ilGetInteger(IL_IMAGE_HEIGHT);
+	return FreeImage_GetHeight(image_bmp);
     }
 
     void *
     GetData () {
-	return data;
+	BYTE *pixels = FreeImage_GetBits(image_bmp);
+
+	// FreeImage stores data in BGR
+	// Convert from BGR to RGB
+	for(int i = 0; i < FreeImage_GetWidth(image_bmp) * FreeImage_GetHeight(image_bmp); i++)
+	{
+		BYTE temp = pixels[i * 4 + 0];
+		pixels[i * 4 + 0] = pixels[i * 4 + 2];
+		pixels[i * 4 + 2] = temp;
+	}
+
+	return pixels;
     }
 
     void
     Load (const char *filename) {
 	this->filename = (char *)filename;
 
-	ilBindImage(image_id);
-	ilLoadImage(filename);
-	ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-
-	data = ilGetData();
+	FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename, 0);
+	image_bmp = FreeImage_Load(format, filename, 0);
+	image_bmp = FreeImage_ConvertTo32Bits(image_bmp);
     }
 
 protected:
@@ -157,16 +164,16 @@ protected:
     }
 
     Image () : EventEmitter() {
-	ilGenImages(1, &image_id);
     }
 
     ~Image () {
-	ilDeleteImages(1, &image_id);
+	if (image_bmp) FreeImage_Unload(image_bmp);
+	FreeImage_DeInitialise();
     }
 
 private:
 
-    ILuint image_id;
+    FIBITMAP *image_bmp;
     char *filename;
     void *data;
 
