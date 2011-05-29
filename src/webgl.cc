@@ -46,12 +46,12 @@ protected:
         HandleScope scope;
 
 	int width = WINDOW_DEFAULT_WIDTH;
-	if(args.Length() >= 1) {
+	if (args.Length() >= 1) {
 	    width = args[0]->IntegerValue();
 	}
 
 	int height = WINDOW_DEFAULT_HEIGHT;
-	if(args.Length() >= 2) {
+	if (args.Length() >= 2) {
 	    height = args[1]->IntegerValue();
 	}
 
@@ -82,7 +82,7 @@ protected:
 	Local<Function> f = Local<Function>::Cast(f_v);
 
 	Handle<Value> values[args.Length()];
-	for(int i = 0; i < args.Length(); i++) {
+	for (int i = 0; i < args.Length(); i++) {
 	    values[i] = args[i];
 	}
 	
@@ -118,7 +118,7 @@ protected:
     }
 
     Window (int width, int height) : EventEmitter() {
-	SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_SetVideoMode(width, height, 32, SDL_OPENGL);
 
@@ -156,8 +156,8 @@ protected:
 		break;
 	    }
 	    case SDL_APPMOUSEFOCUS:
-		if(event.active.state == SDL_APPMOUSEFOCUS) {
-		    if(event.active.gain) {
+		if (event.active.state == SDL_APPMOUSEFOCUS) {
+		    if (event.active.gain) {
 			window->Emit(String::New("mouseover"), 0, NULL);
 		    } else {
 			window->Emit(String::New("mouseout"), 0, NULL);
