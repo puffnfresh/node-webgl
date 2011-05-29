@@ -33,29 +33,6 @@ public:
 	FreeImage_Initialise(true);
     }
 
-    void
-    FlipVertically () {
-	int width = GetWidth();
-	int height = GetHeight();
-
-	int rowBytes = width * 3;
-	uint8_t* tempRow = new uint8_t[rowBytes];
-	for (unsigned i = 0; i < height / 2; i++) {
-	    uint8_t* lowRow = (uint8_t *)data + (rowBytes * i);
-	    uint8_t* highRow = (uint8_t *)data + (rowBytes * (height - i - 1));
-	    memcpy(tempRow, lowRow, rowBytes);
-	    memcpy(lowRow, highRow, rowBytes);
-	    memcpy(highRow, tempRow, rowBytes);
-	}
-	delete[] tempRow;
-    }
-
-    int
-    GetBPP () {
-	    //return FreeImage_GetBPP(image_bmp);
-	    return 32;
-    }
-
     int
     GetWidth () {
 	return FreeImage_GetWidth(image_bmp);

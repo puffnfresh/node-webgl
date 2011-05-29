@@ -79,6 +79,9 @@ public:
 	SetConstant(proto, "REPEAT",          0x2901);
 	SetConstant(proto, "CLAMP_TO_EDGE",   0x812F);
 	SetConstant(proto, "MIRRORED_REPEAT", 0x8370);
+
+	// WebGL-specific enums
+	SetConstant(proto, "UNPACK_FLIP_Y_WEBGL", UNPACK_FLIP_Y_WEBGL);
 	
 	// Methods
         NODE_SET_PROTOTYPE_METHOD(t, "viewport", Viewport);
@@ -120,6 +123,7 @@ public:
         NODE_SET_PROTOTYPE_METHOD(t, "bindTexture", BindTexture);
         NODE_SET_PROTOTYPE_METHOD(t, "texImage2D", TexImage2D);
         NODE_SET_PROTOTYPE_METHOD(t, "activeTexture", ActiveTexture);
+        NODE_SET_PROTOTYPE_METHOD(t, "pixelStorei", PixelStorei);
 
         NODE_SET_PROTOTYPE_METHOD(t, "swapBuffers", SwapBuffers);
 
@@ -467,6 +471,23 @@ protected:
     }
 
     static Handle<Value>
+    PixelStorei (const Arguments& args) {
+	HandleScope scope;
+
+	GLenum pname = args[0]->Uint32Value();
+	GLint param = args[1]->Int32Value();
+
+	// WebGL specific
+	if (pname == UNPACK_FLIP_Y_WEBGL) {
+	    // TODO: Only flip image if called.
+	} else {
+	    glPixelStorei(pname, param);
+	}
+
+        return Undefined();
+    }
+
+    static Handle<Value>
     TexImage2D (const Arguments& args) {
 	HandleScope scope;
 
@@ -481,7 +502,7 @@ protected:
 		     image->GetHeight(), 0, format,
 		     type, image->GetData());
 
-	// We have to 
+	// We have to generate mipmaps
 	glGenerateMipmapEXT(GL_TEXTURE_2D);
 
 	return Undefined();
@@ -505,6 +526,7 @@ private:
 
     static Persistent<FunctionTemplate> constructor_template;
 
+    static const GLenum UNPACK_FLIP_Y_WEBGL = 0x9240;
 };
 
 Persistent<FunctionTemplate> GLContext::constructor_template;
