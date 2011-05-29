@@ -5,7 +5,6 @@
 #include <node.h>
 #include <node_events.h>
 
-#include "typedarray.h"
 #include "image.h"
 
 using namespace v8;
@@ -185,11 +184,12 @@ protected:
     BufferData (const Arguments& args) {
         HandleScope scope;
 
-        Float32Array *fa = Unwrap<Float32Array>(args[1]->ToObject());
+	Local<Object> array = args[1]->ToObject();
+	Local<Object> buffer = array->GetHiddenValue(String::New("_buffer"))->ToObject();
 
 	GLenum target = args[0]->Uint32Value();
-        GLsizei size = fa->Length();
-        const GLvoid* data = fa->GetData();
+        GLsizei size = buffer->Get(String::New("byteLength"))->Uint32Value();
+        const GLvoid* data = array->GetIndexedPropertiesExternalArrayData();
 	GLenum usage = args[2]->Uint32Value();
 
 	glBufferData(target, size, data, usage);
@@ -274,12 +274,12 @@ protected:
     UniformMatrix4fv (const Arguments &args) {
 	HandleScope scope;
 
-        Float32Array *fa = Unwrap<Float32Array>(args[2]->ToObject());
+	Local<Object> array = args[2]->ToObject();
 
 	GLint location = args[0]->IntegerValue();
-	GLsizei count = fa->Length() / sizeof(float);
+	GLsizei count = array->GetIndexedPropertiesExternalArrayDataLength();
 	GLboolean transpose = args[1]->BooleanValue();
-	const GLfloat *value = (float *)fa->GetData();
+	const GLfloat *value = (float *)array->GetIndexedPropertiesExternalArrayData();
 	glUniformMatrix4fv(location, count, transpose, value);
 
 	return Undefined();

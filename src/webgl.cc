@@ -6,7 +6,6 @@
 #include <node_events.h>
 
 #include "glcontext.h"
-#include "typedarray.h"
 #include "image.h"
 
 using namespace v8;
@@ -190,7 +189,6 @@ init (Handle<Object> target) {
     HandleScope scope;
 
     GLContext::Initialize(target);
-    Float32Array::Initialize(target);
     Image::Initialize(target);
     Window::Initialize(target);
 }

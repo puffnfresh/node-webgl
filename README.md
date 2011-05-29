@@ -18,6 +18,7 @@ Building
 --------
 
     node-waf configure build
+    npm install https://github.com/pufuwozu/v8-typed-array/tarball/master
 
 Testing
 -------

@@ -5,8 +5,8 @@ function init(canvas, nodejs) {
 
     if(nodejs) {
 	var webgl = require('../webgl');
-	ArrayBuffer = require('buffer').Buffer;
-	Float32Array = webgl.Float32Array;
+	ArrayBuffer = require('typed-array').ArrayBuffer;
+	Float32Array = require('typed-array').Float32Array;
 	Image = webgl.Image;
     }
 
