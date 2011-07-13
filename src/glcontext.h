@@ -290,7 +290,7 @@ protected:
         HandleScope scope;
 
 	GLenum target = args[0]->Uint32Value();
-	GLenum pname = args[0]->Uint32Value();
+	GLenum pname = args[1]->Uint32Value();
 	GLfloat param = args[2]->NumberValue();
 	glTexParameterf(target, pname, param);
 
@@ -302,7 +302,7 @@ protected:
         HandleScope scope;
 
 	GLenum target = args[0]->Uint32Value();
-	GLenum pname = args[0]->Uint32Value();
+	GLenum pname = args[1]->Uint32Value();
 	GLint param = args[2]->Int32Value();
 	glTexParameteri(target, pname, param);
 
